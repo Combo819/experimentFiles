@@ -1,0 +1,3 @@
+const URI = '';
+
+export {URI};
