@@ -5,10 +5,13 @@ export interface IFile extends Document {
   path: string;
   experimentTime: Date;
   channelSize: number;
-  bubbleType: "native011" | "native51" | "filtered011" | "filtered51";
-  waveType: "s" | "5s" | "p" | "5p" | "n" | "5n";
+  bubbleType: "native" | "filtered";
+  waveType: "s" | "p" | "n";
+  waveLength: string; //number like string
   pressure: number;
   generatedTime: Date;
+  folderName: string;
+  folderDate:Date;
 }
 
 export const fileSchema = new Schema({
@@ -18,8 +21,11 @@ export const fileSchema = new Schema({
   channelSize: { type: Number, required: true },
   bubbleType: { type: String, required: true },
   waveType: { type: String, required: true },
+  waveLength: { type: String, required: true },
   pressure: { type: Number, required: true },
   generatedTime: { type: Date, required: true },
+  folderName: { type: String, required: true },
+  folderDate:{ type: Date, required: true },
 });
 
 const FileModel: Model<IFile> = model("file", fileSchema);
