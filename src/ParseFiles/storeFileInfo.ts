@@ -1,8 +1,8 @@
 import glob, { IOptions } from "glob";
-import { basePath,newBasePath } from "../config";
+import { basePath,newBasePath,thumbnailBasePath } from "../config";
 import { pathToAttr, AllAttr } from "./pathToAttr";
 import { IFile, FileModel } from "../Database";
-import {generatePng} from './generatePng'
+import {generatePng,generateThumbnail} from './generatePng'
 const options: IOptions = {
   cwd: basePath,
 };
@@ -22,6 +22,7 @@ function getFiles(): AllAttr[] {
 function saveFilesInfo() {
   const filesInfo: AllAttr[] = getFiles();
   generatePng(filesInfo,basePath,newBasePath);
+  generateThumbnail(filesInfo,basePath,thumbnailBasePath)
   return new Promise((resolve, reject) => {
     FileModel.collection.drop().catch((err) => {
       reject(err);

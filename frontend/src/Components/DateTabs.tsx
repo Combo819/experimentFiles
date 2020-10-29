@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { message, Tabs, Select, Row, Col } from "antd";
 import { getImagesInfo } from "../Api";
 import { group } from "../Utility/group";
-import {baseUrl} from '../Api/config'
+import {baseURL} from '../Api'
 import { result } from "lodash";
 import _ from "lodash";
 import { PhotoProvider, PhotoConsumer } from "react-photo-view";
@@ -191,7 +191,7 @@ export default function DateTabs(props: Props) {
                       <Col>
                         <PhotoConsumer
                           key={info.path}
-                          src={`http://localhost:5000/${info.path.replace(
+                          src={`${baseURL}/${info.path.replace(
                             ".tif",
                             ".png"
                           )}`}
@@ -199,7 +199,7 @@ export default function DateTabs(props: Props) {
                         >
                           <img
                             height={120}
-                            src={`http://localhost:5000/thumbnail/${info.path.replace(
+                            src={`${baseURL}/thumbnail/${info.path.replace(
                               ".tif",
                               ".png"
                             )}`}
