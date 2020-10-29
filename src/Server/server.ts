@@ -1,11 +1,15 @@
 import express from "express";
-import { port } from "../config";
+import { port, basePath, newBasePath } from "../config";
 import { FileModel } from "../Database";
 import { saveFilesInfo } from "../ParseFiles";
+import cors from "cors";
+import _ from "lodash";
 function startServer() {
   const app = express();
+  app.use(cors());
   app.use(express.urlencoded());
   app.use(express.json());
+  app.use(express.static(newBasePath));
   app.get("/api/dates", (req, res) => {
     FileModel.aggregate([
       {
@@ -65,6 +69,9 @@ function startServer() {
     })
       .exec()
       .then((result) => {
+        result.forEach((item) => {
+          _.omit(item, ["_id", "__v"]);
+        });
         res.send({ result });
       })
       .catch((err) => {

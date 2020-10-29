@@ -1,9 +1,8 @@
 import glob, { IOptions } from "glob";
-import { basePath } from "../config";
+import { basePath,newBasePath } from "../config";
 import { pathToAttr, AllAttr } from "./pathToAttr";
 import { IFile, FileModel } from "../Database";
-import { resolve } from "path";
-import { reject } from "lodash";
+import {generatePng} from './generatePng'
 const options: IOptions = {
   cwd: basePath,
 };
@@ -22,6 +21,7 @@ function getFiles(): AllAttr[] {
 
 function saveFilesInfo() {
   const filesInfo: AllAttr[] = getFiles();
+  generatePng(filesInfo,basePath,newBasePath);
   return new Promise((resolve, reject) => {
     FileModel.collection.drop().catch((err) => {
       reject(err);
