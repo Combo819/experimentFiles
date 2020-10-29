@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { message, Tabs, Select, Row, Col } from "antd";
 import { getImagesInfo } from "../Api";
 import { group } from "../Utility/group";
-import { info } from "console";
+import {baseUrl} from '../Api/config'
 import { result } from "lodash";
 import _ from "lodash";
 import { PhotoProvider, PhotoConsumer } from "react-photo-view";
@@ -183,32 +183,33 @@ export default function DateTabs(props: Props) {
 
           {Object.keys(pressures).map((key) => {
             return (
-              <Row>
-                <PhotoProvider>
-                  {" "}
-                  <Col>key</Col>{" "}
-                  {pressures[key].map((info: Info) => (
-                    <Col>
-                      <PhotoConsumer
-                        key={info.path}
-                        src={`http://localhost:5000/${info.path.replace(
-                          ".tif",
-                          ".png"
-                        )}`}
-                        intro={info.fileName}
-                      >
-                        <img
-                          width={300}
+              <>
+                <Row>{key}</Row>
+                <Row  justify={"start"}>
+                  <PhotoProvider>
+                    {pressures[key].map((info: Info) => (
+                      <Col>
+                        <PhotoConsumer
+                          key={info.path}
                           src={`http://localhost:5000/${info.path.replace(
                             ".tif",
                             ".png"
                           )}`}
-                        ></img>
-                      </PhotoConsumer>
-                    </Col>
-                  ))}
-                </PhotoProvider>
-              </Row>
+                          intro={info.fileName}
+                        >
+                          <img
+                            height={120}
+                            src={`http://localhost:5000/thumbnail/${info.path.replace(
+                              ".tif",
+                              ".png"
+                            )}`}
+                          ></img>
+                        </PhotoConsumer>
+                      </Col>
+                    ))}
+                  </PhotoProvider>
+                </Row>
+              </>
             );
           })}
         </TabPane>
