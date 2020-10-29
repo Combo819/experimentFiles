@@ -2,6 +2,8 @@ import glob, { IOptions } from "glob";
 import { basePath } from "../config";
 import { pathToAttr, AllAttr } from "./pathToAttr";
 import { IFile, FileModel } from "../Database";
+import { resolve } from "path";
+import { reject } from "lodash";
 const options: IOptions = {
   cwd: basePath,
 };
@@ -20,12 +22,19 @@ function getFiles(): AllAttr[] {
 
 function saveFilesInfo() {
   const filesInfo: AllAttr[] = getFiles();
-  FileModel.insertMany(filesInfo, (err, docs) => {
-    if (err && err.code !== 11000) {
-      console.log(err);
-    } else {
-      console.log(`insert successfully`);
-    }
+  return new Promise((resolve, reject) => {
+    FileModel.collection.drop().catch((err) => {
+      reject(err);
+    });
+    FileModel.insertMany(filesInfo, (err, docs) => {
+      if (err && err.code !== 11000) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve();
+        console.log(`insert successfully`);
+      }
+    });
   });
 }
 

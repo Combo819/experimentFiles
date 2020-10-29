@@ -53,7 +53,7 @@ function pathToAttr(path: string): AllAttr {
     )} ${timeExp.slice(0, 2)}:${timeExp.slice(2, 4)}:${timeExp.slice(4, 6)}`
   );
   const generatedTime: Date = new Date(dateGen);
-  const folderDate:Date= new Date(`${date} ${month} ${generatedTime.getFullYear()}`);
+  const folderDate:Date= new Date(`${date} ${month} ${experimentTime.getFullYear()}`);
   return {
     fileName,
     path,
