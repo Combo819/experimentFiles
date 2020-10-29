@@ -35,7 +35,6 @@ function App() {
           </Card>
         </Content>
       </Layout>
-      <Footer>footer</Footer>
     </Layout>
   );
 }
