@@ -11,16 +11,19 @@ const options: IOptions = {
 //s2000_20190407_190511_C001H001S00012025Oct2020.tif-> waveType("s"|"5s"|"p"|"5p"|"n"|"5n")+pressure(number)_dateExp_timeExp(hhmmss)_C001H001S0001+DateGen(hhddMMM2020).tif
 //experimentTime(secondPrecise),channelSize,bubbleType,waveLength,waveType,pressure,generatedTime(hourPrecise)
 function getFiles(): AllAttr[] {
+  console.log(basePath);
   const files: string[] = glob.sync(
-    "**/*C001H001S00012025Oct2020.tif",
+    "*/*.tif",
     options
   );
   const allFilesAttr: AllAttr[] = files.map((path) => pathToAttr(path));
+  console.log(allFilesAttr.length);
   return allFilesAttr;
 }
 
 function saveFilesInfo() {
   const filesInfo: AllAttr[] = getFiles();
+  console.log(filesInfo.length)
   generatePng(filesInfo,basePath,newBasePath);
   generateThumbnail(filesInfo,basePath,thumbnailBasePath)
   return new Promise((resolve, reject) => {

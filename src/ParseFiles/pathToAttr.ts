@@ -100,8 +100,8 @@ function parseFileName(fileName: string): FileNameAttr {
   );
   
   const dateGen: string = tail
-    .replace("c001h001s000120", "")
-    .replace(".tif", "");
+    .replace("c001h001s0001", "")
+    .replace(".tif", "").slice(2);
   return { waveType, pressure, dateExp, timeExp, dateGen };
 }
 

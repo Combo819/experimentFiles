@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { message, Tabs, Select, Row, Col } from "antd";
 import { getImagesInfo } from "../Api";
 import { group } from "../Utility/group";
-import {baseURL} from '../Api'
+import { baseURL } from '../Api'
 import { result } from "lodash";
 import _ from "lodash";
 import { PhotoProvider, PhotoConsumer } from "react-photo-view";
@@ -79,6 +79,21 @@ export default function DateTabs(props: Props) {
     ]);
   });
 
+  const onChannelSizeChange = (value: number) => {
+    setChannelSize(value);
+  };
+  const onBubbleTypeChange = (value: any) => {
+    setBubbleType(value);
+  }
+
+  const onWaveLengthChange = (value: string) => {
+    setWaveLength(value);
+  }
+
+  const onWaveTypeChange = (value: any) => {
+    setWaveType(value);
+  }
+
   const pressures: any = groupPressure(filteredInfo);
 
   return (
@@ -88,7 +103,7 @@ export default function DateTabs(props: Props) {
           <Row gutter={3}>
             <Col>
               channelSize:{" "}
-              <Select value={channelSize} style={{ width: 100 }}>
+              <Select onChange={onChannelSizeChange} value={channelSize} style={{ width: 100 }}>
                 <Option
                   disabled={!availableOptions.channelSize.includes(15)}
                   value={15}
@@ -124,7 +139,7 @@ export default function DateTabs(props: Props) {
             </Col>
             <Col>
               BubbleType:{" "}
-              <Select value={bubbleType as string} style={{ width: 100 }}>
+              <Select onChange={onBubbleTypeChange} value={bubbleType as string} style={{ width: 100 }}>
                 <Option
                   disabled={!availableOptions.bubbleType.includes("native")}
                   value="native"
@@ -141,7 +156,7 @@ export default function DateTabs(props: Props) {
             </Col>
             <Col>
               waveLength:{" "}
-              <Select value={waveLength} style={{ width: 100 }}>
+              <Select onChange={onWaveLengthChange} value={waveLength} style={{ width: 100 }}>
                 <Option
                   disabled={!availableOptions.waveLength.includes("011")}
                   value="011"
@@ -158,7 +173,7 @@ export default function DateTabs(props: Props) {
             </Col>
             <Col>
               waveType:{" "}
-              <Select value={waveType as string} style={{ width: 100 }}>
+              <Select onChange={onWaveTypeChange} value={waveType as string} style={{ width: 100 }}>
                 <Option
                   disabled={!availableOptions.waveType.includes("s")}
                   value="s"
@@ -185,7 +200,7 @@ export default function DateTabs(props: Props) {
             return (
               <>
                 <Row>{key}kpa</Row>
-                <Row  justify={"start"}>
+                <Row justify={"start"}>
                   <PhotoProvider>
                     {pressures[key].map((info: Info) => (
                       <Col>
