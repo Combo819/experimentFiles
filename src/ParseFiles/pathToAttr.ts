@@ -27,7 +27,7 @@ interface AllAttr {
   pressure: number;
   generatedTime: Date;
   folderName: string;
-  folderDate:Date;
+  folderDate: Date;
 }
 
 function pathToAttr(path: string): AllAttr {
@@ -44,7 +44,7 @@ function pathToAttr(path: string): AllAttr {
       throw new Error(`${path} is not a valid path format`);
     }
   });
-  const { channelSize, bubbleType, waveLength,month,date } = folderAttrs;
+  const { channelSize, bubbleType, waveLength, month, date } = folderAttrs;
   const { waveType, pressure, dateExp, timeExp, dateGen } = fileNameAttrs;
   const experimentTime: Date = new Date(
     `${dateExp.slice(0, 4)}-${dateExp.slice(4, 6)}-${dateExp.slice(
@@ -53,7 +53,9 @@ function pathToAttr(path: string): AllAttr {
     )} ${timeExp.slice(0, 2)}:${timeExp.slice(2, 4)}:${timeExp.slice(4, 6)}`
   );
   const generatedTime: Date = new Date(dateGen);
-  const folderDate:Date= new Date(`${date} ${month} ${experimentTime.getFullYear()}`);
+  const folderDate: Date = new Date(
+    `${date} ${month} ${experimentTime.getFullYear()}`
+  );
   return {
     fileName,
     path,
@@ -65,7 +67,7 @@ function pathToAttr(path: string): AllAttr {
     waveType,
     pressure,
     folderName,
-    folderDate
+    folderDate,
   };
 }
 
@@ -89,16 +91,39 @@ function parseFileName(fileName: string): FileNameAttr {
   const [waveTypePressure, dateExp, timeExp, tail] = _.toLower(fileName).split(
     "_"
   );
-  const waveType: "s" | "p" | "n" = <"s" | "p" | "n">(
-    _.get(waveTypePressure.match(/[a-z]+/), 0)
+
+  const {
+    waveType,
+    pressure,
+  }: { waveType: "s" | "p" | "n"; pressure: number } = parseWaveTypePressure(
+    waveTypePressure
   );
-  const pressure: number = parseInt(
-    <string>_.get(waveTypePressure.match(/[0-9]+$/), 0)
-  );
+  
   const dateGen: string = tail
     .replace("c001h001s000120", "")
     .replace(".tif", "");
   return { waveType, pressure, dateExp, timeExp, dateGen };
 }
 
-export {pathToAttr,AllAttr}
+const parseWaveTypePressure = (waveTypePressure: string) => {
+  const pressure: number = parseInt(
+    <string>_.get(waveTypePressure.match(/[0-9]+$/), 0)
+  );
+  const waveTypeStr: string = waveTypePressure.replace(/[0-9]+$/, "");
+  const waveTypeChar: string | undefined = _.get(
+    waveTypeStr.match(/[a-z]+$/),
+    0
+  )?.toLowerCase();
+  let result: "s" | "p" | "n";
+  if (!waveTypeChar) {
+    result = "s";
+  } else if (["s", "p", "n"].includes(waveTypeChar)) {
+    result = <"s" | "p" | "n">waveTypeChar;
+  } else {
+    result = "s";
+  }
+
+  return { waveType: result, pressure };
+};
+
+export { pathToAttr, AllAttr };

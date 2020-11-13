@@ -93,7 +93,7 @@ function startServer() {
   app.use("/", express.static(path.resolve(__dirname, "../../frontend", "build")));
 
 
-  app.listen(port, () => {
+  app.listen(port, '0.0.0.0',() => {
     console.log(`listening on port ${port} \n`);
   });
 }
