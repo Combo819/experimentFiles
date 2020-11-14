@@ -1,6 +1,6 @@
 import express from "express";
 import { port, basePath, newBasePath,thumbnailBasePath } from "../config";
-import { FileModel } from "../Database";
+import { FileModel, IFile } from "../Database";
 import { saveFilesInfo } from "../ParseFiles";
 import cors from "cors";
 import _ from "lodash";
@@ -80,6 +80,19 @@ function startServer() {
         res.status(400).send("failed to processing");
       });
   });
+
+  app.post('/api/update',async (req: express.Request, res: express.Response)=>{
+    const {id,field,value}:{id:any,field:string,value:number} = req.body;
+    try{
+      const file:any= await FileModel.findById(id);
+      file[field] = value;
+      await file.save();
+      res.send({result:'success'});
+    }catch(err){
+      console.log(err);
+      res.send({result:"error"});
+    }
+  })
 
   app.post("/api/read", async (req: express.Request, res: express.Response) => {
     try {
