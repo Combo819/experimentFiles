@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { message, Tabs, Select, Row, Col } from "antd";
+import { message, Tabs, Select, Row, Col, Card,Table } from "antd";
 import { getImagesInfo } from "../Api";
 import { group } from "../Utility/group";
 import { baseURL } from "../Api";
@@ -7,12 +7,13 @@ import { result } from "lodash";
 import _ from "lodash";
 import { PhotoProvider, PhotoConsumer } from "react-photo-view";
 import "react-photo-view/dist/index.css";
+
 const { TabPane } = Tabs;
 const { Option } = Select;
 interface Props {
   dates: string[];
 }
-interface Info {
+export interface Info {
   fileName: string;
   path: string;
   experimentTime: Date;
@@ -228,14 +229,16 @@ export default function EditTable(props: Props) {
                           )}`}
                           intro={info.fileName}
                         >
-                          <img
-                            alt={info.fileName}
-                            height={120}
-                            src={`${baseURL}/thumbnail/${info.path.replace(
-                              ".tif",
-                              ".png"
-                            )}`}
-                          ></img>
+                          <Card>
+                            <img
+                              alt={info.fileName}
+                              height={120}
+                              src={`${baseURL}/thumbnail/${info.path.replace(
+                                ".tif",
+                                ".png"
+                              )}`}
+                            ></img>
+                          </Card>
                         </PhotoConsumer>
                       </Col>
                     ))}

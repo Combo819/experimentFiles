@@ -1,8 +1,17 @@
 import React, { useDebugValue, useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { Layout, Row, Col, Typography, Tabs, Card, message } from "antd";
-import DateTabs from "./Components/DateTabs";
+import {
+  Layout,
+  Row,
+  Col,
+  Typography,
+  Tabs,
+  Card,
+  message,
+  Switch as SwtichAntd,
+} from "antd";
+import DateTabs from "./Pages/DateTabs";
 import { getAllDates } from "./Api";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { routes, Route as RouteType } from "./Routes";
@@ -14,6 +23,7 @@ type Dates = {
 };
 function App() {
   const [dates, setDates] = useState<Dates[]>([]);
+  const [editMode, toggleEditMode] = useState<boolean>(false);
   useEffect(() => {
     {
       getAllDates()
@@ -31,13 +41,23 @@ function App() {
     <Layout>
       <Layout>
         <Content>
+          <div style={{ float: "right" }}>
+            Edit Mode
+            <SwtichAntd
+              onChange={() => {
+                toggleEditMode((preState) => !preState);
+              }}
+              checked={editMode}
+            />
+          </div>
           <Title>Experiment Images Montage</Title>
+
           <Card>
             <Switch>
               {routes.map((route: RouteType) => {
                 return (
                   <Route path={route.path} exact={route.exact}>
-                    <route.component dates={dates.map((item) => item.dates)} />  
+                    <route.component editMode={editMode} dates={dates.map((item) => item.dates)} />
                   </Route>
                 );
               })}

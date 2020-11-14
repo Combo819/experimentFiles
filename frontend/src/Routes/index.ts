@@ -1,6 +1,6 @@
 import { FunctionComponent, ComponentClass } from "react";
-import DateTabs from "../Components/DateTabs";
-import InputTable from "../Components/EditTable";
+import DateTabs from "../Pages/DateTabs";
+import InputTable from "../Pages/EditTable";
 export interface Route {
   path: string;
   component: FunctionComponent<any> | ComponentClass<any>;
