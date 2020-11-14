@@ -1,6 +1,5 @@
 import { FunctionComponent, ComponentClass } from "react";
 import DateTabs from "../Pages/DateTabs";
-import InputTable from "../Pages/EditTable";
 export interface Route {
   path: string;
   component: FunctionComponent<any> | ComponentClass<any>;
@@ -8,5 +7,4 @@ export interface Route {
 }
 export const routes: Route[] = [
   { path: "/", component: DateTabs, exact: true },
-  { path: "/edit", component: InputTable, exact: false },
 ];
