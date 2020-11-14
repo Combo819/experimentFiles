@@ -111,7 +111,7 @@ const parseWaveTypePressure = (waveTypePressure: string) => {
   );
   const waveTypeStr: string = waveTypePressure.replace(/[0-9]+$/, "");
   const waveTypeChar: string | undefined = _.get(
-    waveTypeStr.match(/[a-z]+$/),
+    waveTypeStr.match(/[a-z]$/),
     0
   )?.toLowerCase();
   let result: "s" | "p" | "n";
