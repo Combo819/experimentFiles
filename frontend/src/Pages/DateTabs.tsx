@@ -42,24 +42,9 @@ export default function DateTabs(props: Props) {
     setDate(activeKey);
   };
 
+  
   useEffect(() => {
-    if (date) {
-      getImagesInfo(date)
-        .then((res) => {
-          setInfos(res.data.result);
-          if (result.length > 0) {
-            const firstInfo: Info = res.data.result[0];
-            setChannelSize(firstInfo.channelSize);
-            setBubbleType(firstInfo.bubbleType);
-            setWaveLength(firstInfo.waveLength);
-            setWaveType(firstInfo.waveType);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          message.error("failed to get images");
-        });
-    }
+    updateImageInfo();
   }, [date]);
   useEffect(() => {
     setDate(dates[0]);
@@ -223,7 +208,7 @@ export default function DateTabs(props: Props) {
                     {pressures[key].map((info: Info) => (
                       <Col>
                         {editMode ? (
-                          <ImageCard fileInfo={info}></ImageCard>
+                          <ImageCard fileInfo={info} updateImageInfo={updateImageInfo}></ImageCard>
                         ) : (
                           <PhotoConsumer
                             key={info.path}
@@ -256,6 +241,26 @@ export default function DateTabs(props: Props) {
       ))}
     </Tabs>
   );
+
+  function updateImageInfo() {
+    if (date) {
+      getImagesInfo(date)
+        .then((res) => {
+          setInfos(res.data.result);
+          if (result.length > 0) {
+            const firstInfo: Info = res.data.result[0];
+            setChannelSize(firstInfo.channelSize);
+            setBubbleType(firstInfo.bubbleType);
+            setWaveLength(firstInfo.waveLength);
+            setWaveType(firstInfo.waveType);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          message.error("failed to get images");
+        });
+    }
+  }
 }
 
 const groupPressure = (infos: Info[]) => {

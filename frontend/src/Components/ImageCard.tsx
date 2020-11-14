@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { Info } from "../Pages/EditTable";
 import { baseURL } from "../Api";
-import { Card, Table, Form, Input } from "antd";
+import { Card, Table, Form, Input, message } from "antd";
 import { PhotoProvider, PhotoConsumer } from "react-photo-view";
+import {updateInfo} from '../Api'
 import "react-photo-view/dist/index.css";
 const EditableContext = React.createContext<any>(null);
 const columnsInfo = [
@@ -80,7 +81,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
   }, [editing]);
 
   const toggleEdit = () => {
-    console.log("clicking");
     setEditing(!editing);
     form.setFieldsValue({ [dataIndex]: (record as any)[dataIndex] });
   };
@@ -105,10 +105,13 @@ const EditableCell: React.FC<EditableCellProps> = ({
         }}
         name={dataIndex}
         rules={[
-          {
-            required: true,
-            message: `${title} is required.`,
-          },
+          {validator(rule,value){
+            if(isNaN(parseInt(value))){
+              return Promise.reject(`You should input a valid number`);
+            }else{
+              return Promise.resolve();
+            }
+          }}
         ]}
       >
         <Input ref={inputRef} onPressEnter={save} onBlur={save} />
@@ -129,7 +132,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
-export default function ImageCard({ fileInfo }: { fileInfo: Info }) {
+export default function ImageCard({ fileInfo,updateImageInfo }: { fileInfo: Info,updateImageInfo:()=>void }) {
   const components = {
     body: {
       row: EditableRow,
@@ -138,11 +141,17 @@ export default function ImageCard({ fileInfo }: { fileInfo: Info }) {
   };
 
   const handleSave = (row: any, col: any) => {
-    console.log(row, col);
+    const id:string = row["_id"];
+    const field:string = col["dataIndex"];
+    const value:number = parseInt(row[field]);
+    updateInfo(id,field,value).then(res=>{
+      updateImageInfo();
+    }).catch(err=>{
+      message.error(`Failed to update ${field} of ${fileInfo.fileName}`);
+    })
   };
 
   const columns = columnsInfo.map((col) => {
-    console.log(col);
     if (!col.editable) {
       return col;
     }

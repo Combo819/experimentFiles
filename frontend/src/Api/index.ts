@@ -1,2 +1,2 @@
-export {getAllDates,reReadImages,getImagesInfo} from './api';
+export {getAllDates,reReadImages,getImagesInfo,updateInfo} from './api';
 export {baseURL} from './config'
