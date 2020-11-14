@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { FileAttr } from "../Database";
 
 interface FolderAttr {
   month: string;
@@ -16,21 +17,7 @@ interface FileNameAttr {
   dateGen: string;
 }
 
-interface AllAttr {
-  fileName: string;
-  path: string;
-  experimentTime: Date;
-  channelSize: number;
-  bubbleType: "native" | "filtered";
-  waveType: "s" | "p" | "n";
-  waveLength: string; //number like string
-  pressure: number;
-  generatedTime: Date;
-  folderName: string;
-  folderDate: Date;
-}
-
-function pathToAttr(path: string): AllAttr {
+function pathToAttr(path: string): FileAttr {
   const pathArr: string[] = path.split("/");
   if (pathArr.length !== 2) {
     throw new Error(`the root path should start 2 level above the .tif files`);
@@ -68,6 +55,10 @@ function pathToAttr(path: string): AllAttr {
     pressure,
     folderName,
     folderDate,
+    bubblePersistance: -1,
+    burst: -1,
+    cluster: -1,
+    valid: -1,
   };
 }
 
@@ -98,10 +89,11 @@ function parseFileName(fileName: string): FileNameAttr {
   }: { waveType: "s" | "p" | "n"; pressure: number } = parseWaveTypePressure(
     waveTypePressure
   );
-  
+
   const dateGen: string = tail
     .replace("c001h001s0001", "")
-    .replace(".tif", "").slice(2);
+    .replace(".tif", "")
+    .slice(2);
   return { waveType, pressure, dateExp, timeExp, dateGen };
 }
 
@@ -126,4 +118,4 @@ const parseWaveTypePressure = (waveTypePressure: string) => {
   return { waveType: result, pressure };
 };
 
-export { pathToAttr, AllAttr };
+export { pathToAttr, FileAttr };

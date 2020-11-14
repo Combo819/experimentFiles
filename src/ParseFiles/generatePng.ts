@@ -1,10 +1,10 @@
-import { AllAttr } from "./pathToAttr";
+import { FileAttr } from "./pathToAttr";
 import sharp from "sharp";
 const path = require("path");
 const fs = require("fs");
 
 function generatePng(
-  fileInfos: AllAttr[],
+  fileInfos: FileAttr[],
   basePath: string,
   newBasePath: string
 ) {
@@ -25,7 +25,7 @@ function generatePng(
 }
 
 function generateThumbnail(
-  fileInfos: AllAttr[],
+  fileInfos: FileAttr[],
   basePath: string,
   newBasePath: string
 ) {

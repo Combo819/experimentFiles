@@ -1,24 +1,32 @@
-import {axios} from './config';
+import { axios } from "./config";
 
-function getAllDates(){
-    return axios({
-        url:'/api/dates',
-    })
-};
-
-function reReadImages(){
-    return axios({
-        method:'post',
-        url:'/api/read',
-    })
+function getAllDates() {
+  return axios({
+    url: "/api/dates",
+  });
 }
 
-function getImagesInfo(date:string){
-    return axios({
-        method:'get',
-        url:'/api/images',
-        params:{date}
-    })
+function reReadImages() {
+  return axios({
+    method: "post",
+    url: "/api/read",
+  });
 }
 
-export {getAllDates,reReadImages,getImagesInfo};
+function getImagesInfo(date: string) {
+  return axios({
+    method: "get",
+    url: "/api/images",
+    params: { date },
+  });
+}
+
+function updateInfo(id: string, field: string, value: number) {
+  return axios({
+    method: "post",
+    url: "/api/update",
+    data: { id, field, value },
+  });
+}
+
+export { getAllDates, reReadImages, getImagesInfo,updateInfo };

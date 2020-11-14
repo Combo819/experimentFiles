@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { message, Tabs, Select, Row, Col } from "antd";
+import React, { useEffect, useState, FunctionComponent } from "react";
+import { message, Tabs, Select, Row, Col,Card } from "antd";
 import { getImagesInfo } from "../Api";
 import { group } from "../Utility/group";
-import { baseURL } from '../Api'
+import { baseURL } from "../Api";
 import { result } from "lodash";
 import _ from "lodash";
 import { PhotoProvider, PhotoConsumer } from "react-photo-view";
 import "react-photo-view/dist/index.css";
+import ImageCard from "../Components/ImageCard";
 const { TabPane } = Tabs;
 const { Option } = Select;
 interface Props {
   dates: string[];
+  editMode: boolean;
 }
-interface Info {
+export interface Info {
   fileName: string;
   path: string;
   experimentTime: Date;
@@ -26,7 +28,7 @@ interface Info {
   folderDate: Date;
 }
 export default function DateTabs(props: Props) {
-  const dates: string[] = props.dates;
+  const { dates, editMode } = props;
   const [date, setDate] = useState<string>("");
   const [infos, setInfos] = useState<Info[]>([]);
   const [channelSize, setChannelSize] = useState<number>(-1);
@@ -40,24 +42,9 @@ export default function DateTabs(props: Props) {
     setDate(activeKey);
   };
 
+  
   useEffect(() => {
-    if (date) {
-      getImagesInfo(date)
-        .then((res) => {
-          setInfos(res.data.result);
-          if (result.length > 0) {
-            const firstInfo: Info = res.data.result[0];
-            setChannelSize(firstInfo.channelSize);
-            setBubbleType(firstInfo.bubbleType);
-            setWaveLength(firstInfo.waveLength);
-            setWaveType(firstInfo.waveType);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          message.error("failed to get images");
-        });
-    }
+    updateImageInfo();
   }, [date]);
   useEffect(() => {
     setDate(dates[0]);
@@ -84,15 +71,15 @@ export default function DateTabs(props: Props) {
   };
   const onBubbleTypeChange = (value: any) => {
     setBubbleType(value);
-  }
+  };
 
   const onWaveLengthChange = (value: string) => {
     setWaveLength(value);
-  }
+  };
 
   const onWaveTypeChange = (value: any) => {
     setWaveType(value);
-  }
+  };
 
   const pressures: any = groupPressure(filteredInfo);
 
@@ -103,7 +90,11 @@ export default function DateTabs(props: Props) {
           <Row gutter={3}>
             <Col>
               channelSize:{" "}
-              <Select onChange={onChannelSizeChange} value={channelSize} style={{ width: 100 }}>
+              <Select
+                onChange={onChannelSizeChange}
+                value={channelSize}
+                style={{ width: 100 }}
+              >
                 <Option
                   disabled={!availableOptions.channelSize.includes(15)}
                   value={15}
@@ -139,7 +130,11 @@ export default function DateTabs(props: Props) {
             </Col>
             <Col>
               BubbleType:{" "}
-              <Select onChange={onBubbleTypeChange} value={bubbleType as string} style={{ width: 100 }}>
+              <Select
+                onChange={onBubbleTypeChange}
+                value={bubbleType as string}
+                style={{ width: 100 }}
+              >
                 <Option
                   disabled={!availableOptions.bubbleType.includes("native")}
                   value="native"
@@ -156,7 +151,11 @@ export default function DateTabs(props: Props) {
             </Col>
             <Col>
               waveLength:{" "}
-              <Select onChange={onWaveLengthChange} value={waveLength} style={{ width: 100 }}>
+              <Select
+                onChange={onWaveLengthChange}
+                value={waveLength}
+                style={{ width: 100 }}
+              >
                 <Option
                   disabled={!availableOptions.waveLength.includes("011")}
                   value="011"
@@ -173,7 +172,11 @@ export default function DateTabs(props: Props) {
             </Col>
             <Col>
               waveType:{" "}
-              <Select onChange={onWaveTypeChange} value={waveType as string} style={{ width: 100 }}>
+              <Select
+                onChange={onWaveTypeChange}
+                value={waveType as string}
+                style={{ width: 100 }}
+              >
                 <Option
                   disabled={!availableOptions.waveType.includes("s")}
                   value="s"
@@ -204,22 +207,29 @@ export default function DateTabs(props: Props) {
                   <PhotoProvider>
                     {pressures[key].map((info: Info) => (
                       <Col>
-                        <PhotoConsumer
-                          key={info.path}
-                          src={`${baseURL}/${info.path.replace(
-                            ".tif",
-                            ".png"
-                          )}`}
-                          intro={info.fileName}
-                        >
-                          <img
-                            height={120}
-                            src={`${baseURL}/thumbnail/${info.path.replace(
+                        {editMode ? (
+                          <ImageCard fileInfo={info} updateImageInfo={updateImageInfo}></ImageCard>
+                        ) : (
+                          <PhotoConsumer
+                            key={info.path}
+                            src={`${baseURL}/${info.path.replace(
                               ".tif",
                               ".png"
                             )}`}
-                          ></img>
-                        </PhotoConsumer>
+                            intro={info.fileName}
+                          >
+                            <Card>
+                              <img
+                                alt={info.fileName}
+                                height={120}
+                                src={`${baseURL}/thumbnail/${info.path.replace(
+                                  ".tif",
+                                  ".png"
+                                )}`}
+                              ></img>
+                            </Card>
+                          </PhotoConsumer>
+                        )}
                       </Col>
                     ))}
                   </PhotoProvider>
@@ -231,6 +241,26 @@ export default function DateTabs(props: Props) {
       ))}
     </Tabs>
   );
+
+  function updateImageInfo() {
+    if (date) {
+      getImagesInfo(date)
+        .then((res) => {
+          setInfos(res.data.result);
+          if (result.length > 0) {
+            const firstInfo: Info = res.data.result[0];
+            setChannelSize(firstInfo.channelSize);
+            setBubbleType(firstInfo.bubbleType);
+            setWaveLength(firstInfo.waveLength);
+            setWaveType(firstInfo.waveType);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          message.error("failed to get images");
+        });
+    }
+  }
 }
 
 const groupPressure = (infos: Info[]) => {
