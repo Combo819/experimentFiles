@@ -1,3 +1,3 @@
-import FileModel,{IFile} from './Models/file';
+import FileModel,{IFile,FileAttr} from './Models/file';
 import {connectDB} from './connect'
-export {FileModel,IFile,connectDB}
+export {FileModel,IFile,connectDB,FileAttr}
