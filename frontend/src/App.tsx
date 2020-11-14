@@ -4,12 +4,14 @@ import "./App.css";
 import { Layout, Row, Col, Typography, Tabs, Card, message } from "antd";
 import DateTabs from "./Components/DateTabs";
 import { getAllDates } from "./Api";
+import { Switch, Route, Redirect } from "react-router-dom";
+import { routes, Route as RouteType } from "./Routes";
 const { Header, Content, Footer } = Layout;
 const { TabPane } = Tabs;
 const { Title } = Typography;
 type Dates = {
-  dates:string
-}
+  dates: string;
+};
 function App() {
   const [dates, setDates] = useState<Dates[]>([]);
   useEffect(() => {
@@ -24,14 +26,23 @@ function App() {
         });
     }
   }, []);
-  console.log(dates)
+  console.log(dates);
   return (
     <Layout>
       <Layout>
         <Content>
           <Title>Experiment Images Montage</Title>
           <Card>
-            <DateTabs dates={dates.map(item=>item.dates)} />
+            <Switch>
+              {routes.map((route: RouteType) => {
+                return (
+                  <Route path={route.path} exact={route.exact}>
+                    <route.component dates={dates.map((item) => item.dates)} />  
+                  </Route>
+                );
+              })}
+              <Redirect to="/" />
+            </Switch>
           </Card>
         </Content>
       </Layout>

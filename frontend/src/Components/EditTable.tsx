@@ -1,8 +1,8 @@
-import React, { useEffect, useState,FunctionComponent } from "react";
+import React, { useEffect, useState } from "react";
 import { message, Tabs, Select, Row, Col } from "antd";
 import { getImagesInfo } from "../Api";
 import { group } from "../Utility/group";
-import { baseURL } from '../Api'
+import { baseURL } from "../Api";
 import { result } from "lodash";
 import _ from "lodash";
 import { PhotoProvider, PhotoConsumer } from "react-photo-view";
@@ -25,7 +25,7 @@ interface Info {
   folderName: string;
   folderDate: Date;
 }
-export default function DateTabs(props: Props) {
+export default function EditTable(props: Props) {
   const dates: string[] = props.dates;
   const [date, setDate] = useState<string>("");
   const [infos, setInfos] = useState<Info[]>([]);
@@ -84,15 +84,15 @@ export default function DateTabs(props: Props) {
   };
   const onBubbleTypeChange = (value: any) => {
     setBubbleType(value);
-  }
+  };
 
   const onWaveLengthChange = (value: string) => {
     setWaveLength(value);
-  }
+  };
 
   const onWaveTypeChange = (value: any) => {
     setWaveType(value);
-  }
+  };
 
   const pressures: any = groupPressure(filteredInfo);
 
@@ -103,7 +103,11 @@ export default function DateTabs(props: Props) {
           <Row gutter={3}>
             <Col>
               channelSize:{" "}
-              <Select onChange={onChannelSizeChange} value={channelSize} style={{ width: 100 }}>
+              <Select
+                onChange={onChannelSizeChange}
+                value={channelSize}
+                style={{ width: 100 }}
+              >
                 <Option
                   disabled={!availableOptions.channelSize.includes(15)}
                   value={15}
@@ -139,7 +143,11 @@ export default function DateTabs(props: Props) {
             </Col>
             <Col>
               BubbleType:{" "}
-              <Select onChange={onBubbleTypeChange} value={bubbleType as string} style={{ width: 100 }}>
+              <Select
+                onChange={onBubbleTypeChange}
+                value={bubbleType as string}
+                style={{ width: 100 }}
+              >
                 <Option
                   disabled={!availableOptions.bubbleType.includes("native")}
                   value="native"
@@ -156,7 +164,11 @@ export default function DateTabs(props: Props) {
             </Col>
             <Col>
               waveLength:{" "}
-              <Select onChange={onWaveLengthChange} value={waveLength} style={{ width: 100 }}>
+              <Select
+                onChange={onWaveLengthChange}
+                value={waveLength}
+                style={{ width: 100 }}
+              >
                 <Option
                   disabled={!availableOptions.waveLength.includes("011")}
                   value="011"
@@ -173,7 +185,11 @@ export default function DateTabs(props: Props) {
             </Col>
             <Col>
               waveType:{" "}
-              <Select onChange={onWaveTypeChange} value={waveType as string} style={{ width: 100 }}>
+              <Select
+                onChange={onWaveTypeChange}
+                value={waveType as string}
+                style={{ width: 100 }}
+              >
                 <Option
                   disabled={!availableOptions.waveType.includes("s")}
                   value="s"
