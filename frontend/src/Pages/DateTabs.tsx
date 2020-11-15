@@ -85,7 +85,7 @@ export default function DateTabs(props: Props) {
 
   return (
     <Tabs onChange={changeDate} tabPosition={"left"}>
-      {dates.map((item) => (
+      {dates.sort((a:string,b:string)=>((new Date(a))>(new Date(b))?1:-1)).map((item) => (
         <TabPane tab={item} key={item}>
           <Row gutter={3}>
             <Col>
