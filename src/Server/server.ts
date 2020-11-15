@@ -85,10 +85,10 @@ function startServer() {
   app.post('/api/update', async (req: express.Request, res: express.Response) => {
     const { id, field, value }: { id: any, field: string, value: number } = req.body;
     try {
-      const file: any = await FileModel.findById(id);
-      file[field] = value;
-      await file.save();
-      res.send({ result: 'success' });
+      const file: IFile| null= await FileModel.findById(id);
+      (file as any)[field] = value;
+      await file?.save();
+      res.send({ result: file });
     } catch (err) {
       console.log(err);
       res.send({ result: "error" });

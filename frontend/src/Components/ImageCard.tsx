@@ -132,7 +132,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
-export default function ImageCard({ fileInfo,updateImageInfo }: { fileInfo: Info,updateImageInfo:()=>void }) {
+export default function ImageCard({ fileInfo:fileInfoParent,updateImageInfo }: { fileInfo: Info,updateImageInfo:()=>void }) {
+  const [fileInfo,setFileInfo] = useState<Info>(fileInfoParent);
   const components = {
     body: {
       row: EditableRow,
@@ -144,8 +145,9 @@ export default function ImageCard({ fileInfo,updateImageInfo }: { fileInfo: Info
     const id:string = row["_id"];
     const field:string = col["dataIndex"];
     const value:number = parseInt(row[field]);
-    updateInfo(id,field,value).then(res=>{
-      updateImageInfo();
+    updateInfo(id,field,value).then((res:any)=>{
+      //updateImageInfo();
+      setFileInfo(res?.data?.result );
     }).catch(err=>{
       message.error(`Failed to update ${field} of ${fileInfo.fileName}`);
     })
