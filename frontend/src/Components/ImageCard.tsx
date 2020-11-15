@@ -134,6 +134,10 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
 export default function ImageCard({ fileInfo:fileInfoParent,updateImageInfo }: { fileInfo: Info,updateImageInfo:()=>void }) {
   const [fileInfo,setFileInfo] = useState<Info>(fileInfoParent);
+
+  useEffect(()=>{
+    setFileInfo(fileInfoParent);
+  },[fileInfoParent]);
   const components = {
     body: {
       row: EditableRow,
