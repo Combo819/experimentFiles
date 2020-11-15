@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { Info } from "../Pages/EditTable";
+import { Info } from "../Pages/DateTabs";
 import { baseURL } from "../Api";
 import { Card, Table, Form, Input, message } from "antd";
 import { PhotoProvider, PhotoConsumer } from "react-photo-view";
