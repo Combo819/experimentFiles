@@ -1,7 +1,8 @@
 import express from "express";
-import { port, basePath, newBasePath,thumbnailBasePath } from "../config";
-import { FileModel, IFile } from "../Database";
+import { port, basePath, newBasePath, thumbnailBasePath, recordsPath } from "../config";
+import { FileAttr, FileModel, IFile, updateMany } from "../Database";
 import { saveFilesInfo } from "../ParseFiles";
+import fs from 'fs';
 import cors from "cors";
 import _ from "lodash";
 const path = require('path');
@@ -81,20 +82,21 @@ function startServer() {
       });
   });
 
-  app.post('/api/update',async (req: express.Request, res: express.Response)=>{
-    const {id,field,value}:{id:any,field:string,value:number} = req.body;
-    try{
-      const file:any= await FileModel.findById(id);
+  app.post('/api/update', async (req: express.Request, res: express.Response) => {
+    const { id, field, value }: { id: any, field: string, value: number } = req.body;
+    try {
+      const file: any = await FileModel.findById(id);
       file[field] = value;
       await file.save();
-      res.send({result:'success'});
-    }catch(err){
+      res.send({ result: 'success' });
+    } catch (err) {
       console.log(err);
-      res.send({result:"error"});
+      res.send({ result: "error" });
     }
   })
 
   app.post("/api/read", async (req: express.Request, res: express.Response) => {
+
     try {
       await saveFilesInfo();
       res.send({ result: "success" });
@@ -103,10 +105,26 @@ function startServer() {
     }
   });
 
+  app.post("/api/updateRecords", async (req: express.Request, res: express.Response) => {
+    //const records: FileAttr[] = req.body.records;
+    try {
+      const records: FileAttr[] = require(recordsPath);
+      console.log(records)
+      await updateMany(records, ['bubblePersistance',
+        'burst',
+        'cluster',
+        'valid',]);
+        res.send({result:'success'})
+    } catch (err) {
+      console.log(err);
+      res.send({ result: 'error' });
+    }
+  })
+
   app.use("/", express.static(path.resolve(__dirname, "../../frontend", "build")));
 
 
-  app.listen(port, '0.0.0.0',() => {
+  app.listen(port, '0.0.0.0', () => {
     console.log(`listening on port ${port} \n`);
   });
 }
