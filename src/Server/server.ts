@@ -84,7 +84,7 @@ function startServer() {
   app.post('/api/update', async (req: express.Request, res: express.Response) => {
     const { id, field, value }: { id: any, field: string, value: number } = req.body;
     try {
-      const file: IFile| null= await FileModel.findById(id);
+      const file: IFile | null = await FileModel.findById(id);
       (file as any)[field] = value;
       await file?.save();
       res.send({ result: file });
@@ -112,8 +112,8 @@ function startServer() {
       await updateMany(records, ['bubblePersistance',
         'burst',
         'cluster',
-        'valid',]);
-        res.send({result:'success'})
+        'valid', 'bubbleHandling', 'channelDamage', 'note']);
+      res.send({ result: 'success' })
     } catch (err) {
       console.log(err);
       res.send({ result: 'error' });

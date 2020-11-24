@@ -56,6 +56,7 @@ function pathToAttr(path: string): FileAttr {
     folderName,
     folderDate,
     bubblePersistance: -1,
+    bubbleNumber:-1,
     burst: -1,
     cluster: -1,
     valid: -1,

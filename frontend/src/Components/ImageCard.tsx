@@ -14,6 +14,12 @@ const columnsInfo = [
     width: 100,
   },
   {
+    title: "Bubble Number",
+    dataIndex: "bubbleNumber",
+    editable: true,
+    width: 100,
+  },
+  {
     title: "Burst",
     dataIndex: "burst",
     editable: true,
@@ -53,7 +59,7 @@ const columnsInfo = [
 const numberFields = ['bubblePersistance',
   'burst',
   'cluster',
-  'valid', 'bubbleHandling',
+  'valid', 'bubbleHandling','bubbleNumber',
   'channelDamage',]
 interface Item {
   bubblePersistance: number;

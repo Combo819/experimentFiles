@@ -27,9 +27,9 @@ function saveFilesInfo() {
   generatePng(filesInfo,basePath,newBasePath);
   generateThumbnail(filesInfo,basePath,thumbnailBasePath)
   return new Promise((resolve, reject) => {
-/*      FileModel.collection.drop().catch((err) => {
+     FileModel.collection.drop().catch((err) => {
       reject(err);
-    });  */
+    }); 
     FileModel.insertMany(filesInfo, (err, docs) => {
       if (err && err.code !== 11000) {
         console.log(err);
