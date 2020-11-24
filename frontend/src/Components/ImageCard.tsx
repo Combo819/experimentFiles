@@ -3,7 +3,7 @@ import { Info } from "../Pages/DateTabs";
 import { baseURL } from "../Api";
 import { Card, Table, Form, Input, message } from "antd";
 import { PhotoProvider, PhotoConsumer } from "react-photo-view";
-import {updateInfo} from '../Api'
+import { updateInfo } from '../Api'
 import "react-photo-view/dist/index.css";
 const EditableContext = React.createContext<any>(null);
 const columnsInfo = [
@@ -31,7 +31,30 @@ const columnsInfo = [
     editable: true,
     width: 100,
   },
+  {
+    title: "Bubble Handling",
+    dataIndex: "bubbleHandling",
+    editable: true,
+    width: 100,
+  },
+  {
+    title: "Channel Damage",
+    dataIndex: "channelDamage",
+    editable: true,
+    width: 100,
+  },
+  {
+    title: "Note",
+    dataIndex: "note",
+    editable: true,
+    width: 100,
+  },
 ];
+const numberFields = ['bubblePersistance',
+  'burst',
+  'cluster',
+  'valid', 'bubbleHandling',
+  'channelDamage',]
 interface Item {
   bubblePersistance: number;
   burst: number;
@@ -96,7 +119,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
   };
 
   let childNode = children;
-
   if (editable) {
     childNode = editing ? (
       <Form.Item
@@ -105,39 +127,45 @@ const EditableCell: React.FC<EditableCellProps> = ({
         }}
         name={dataIndex}
         rules={[
-          {validator(rule,value){
-            if(isNaN(parseInt(value))){
-              return Promise.reject(`You should input a valid number`);
-            }else{
-              return Promise.resolve();
+          {
+            validator(rule, value) {
+              if(!numberFields.includes(dataIndex)){
+                return Promise.resolve();
+              }
+              if (isNaN(parseInt(value))) {
+                return Promise.reject(`You should input a valid number`);
+              } else {
+                return Promise.resolve();
+              }
             }
-          }}
+          }
         ]}
       >
         <Input ref={inputRef} onPressEnter={save} onBlur={save} />
       </Form.Item>
     ) : (
-      <div
-        className="editable-cell-value-wrap"
-        style={{
-          paddingRight: 24,
-        }}
-        onClick={toggleEdit}
-      >
-        {children}
-      </div>
-    );
+        <div
+          className="editable-cell-value-wrap"
+          style={{
+            paddingRight: 24,
+            minHeight:30
+          }}
+          onClick={toggleEdit}
+        >
+          {children}
+        </div>
+      );
   }
 
   return <td {...restProps}>{childNode}</td>;
 };
 
-export default function ImageCard({ fileInfo:fileInfoParent,updateImageInfo }: { fileInfo: Info,updateImageInfo:()=>void }) {
-  const [fileInfo,setFileInfo] = useState<Info>(fileInfoParent);
+export default function ImageCard({ fileInfo: fileInfoParent, updateImageInfo }: { fileInfo: Info, updateImageInfo: () => void }) {
+  const [fileInfo, setFileInfo] = useState<Info>(fileInfoParent);
 
-  useEffect(()=>{
+  useEffect(() => {
     setFileInfo(fileInfoParent);
-  },[fileInfoParent]);
+  }, [fileInfoParent]);
   const components = {
     body: {
       row: EditableRow,
@@ -146,15 +174,26 @@ export default function ImageCard({ fileInfo:fileInfoParent,updateImageInfo }: {
   };
 
   const handleSave = (row: any, col: any) => {
-    const id:string = row["_id"];
-    const field:string = col["dataIndex"];
-    const value:number = parseInt(row[field]);
-    updateInfo(id,field,value).then((res:any)=>{
-      //updateImageInfo();
-      setFileInfo(res?.data?.result );
-    }).catch(err=>{
-      message.error(`Failed to update ${field} of ${fileInfo.fileName}`);
-    })
+    const id: string = row["_id"];
+    const field: string = col["dataIndex"];
+    if(numberFields.includes(field)){
+      const value: number  = parseInt(row[field]);
+      updateInfo(id, field, value).then((res: any) => {
+        //updateImageInfo();
+        setFileInfo(res?.data?.result);
+      }).catch(err => {
+        message.error(`Failed to update ${field} of ${fileInfo.fileName}`);
+      })
+    }else{
+      const value: string  = row[field]
+      updateInfo(id, field, value).then((res: any) => {
+        //updateImageInfo();
+        setFileInfo(res?.data?.result);
+      }).catch(err => {
+        message.error(`Failed to update ${field} of ${fileInfo.fileName}`);
+      })
+    }
+
   };
 
   const columns = columnsInfo.map((col) => {

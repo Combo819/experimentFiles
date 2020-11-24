@@ -21,7 +21,7 @@ function getImagesInfo(date: string) {
   });
 }
 
-function updateInfo(id: string, field: string, value: number) {
+function updateInfo(id: string, field: string, value: number | string) {
   return axios({
     method: "post",
     url: "/api/update",

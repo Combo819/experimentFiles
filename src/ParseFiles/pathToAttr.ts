@@ -59,6 +59,9 @@ function pathToAttr(path: string): FileAttr {
     burst: -1,
     cluster: -1,
     valid: -1,
+    bubbleHandling: 1,
+    channelDamage: 0,
+    note: "",
   };
 }
 

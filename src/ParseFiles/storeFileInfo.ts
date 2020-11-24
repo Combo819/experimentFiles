@@ -17,7 +17,7 @@ function getFiles(): FileAttr[] {
     options
   );
   const allFilesAttr: FileAttr[] = files.map((path) => pathToAttr(path));
-  console.log(allFilesAttr.length);
+  console.log(allFilesAttr[0]);
   return allFilesAttr;
 }
 
@@ -27,9 +27,9 @@ function saveFilesInfo() {
   generatePng(filesInfo,basePath,newBasePath);
   generateThumbnail(filesInfo,basePath,thumbnailBasePath)
   return new Promise((resolve, reject) => {
-    FileModel.collection.drop().catch((err) => {
+/*      FileModel.collection.drop().catch((err) => {
       reject(err);
-    });
+    });  */
     FileModel.insertMany(filesInfo, (err, docs) => {
       if (err && err.code !== 11000) {
         console.log(err);

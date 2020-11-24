@@ -2,7 +2,6 @@ import express from "express";
 import { port, basePath, newBasePath, thumbnailBasePath, recordsPath } from "../config";
 import { FileAttr, FileModel, IFile, updateMany } from "../Database";
 import { saveFilesInfo } from "../ParseFiles";
-import fs from 'fs';
 import cors from "cors";
 import _ from "lodash";
 const path = require('path');
