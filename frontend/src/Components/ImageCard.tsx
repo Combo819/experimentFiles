@@ -55,6 +55,12 @@ const columnsInfo = [
     editable: true,
     width: 100,
   },
+  {
+    title: "Spectrum",
+    dataIndex: "spectrum",
+    editable: true,
+    width: 100,
+  }
 ];
 const numberFields = ['bubblePersistance',
   'burst',
