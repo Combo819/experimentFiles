@@ -18,8 +18,8 @@ export type FileAttr =  {
   valid: number, // -1->not input, 0->false, 1->true
   bubbleHandling: number // 0->false, 1->true. default 1, handling is ok
   channelDamage:number // 0->false, 1->true. default 0, no damage
-  note: string // default empty string ""
-  
+  note: string, // default empty string ""
+  spectrum:string,
 }
 export type IFile = Document & FileAttr;
 
@@ -43,6 +43,7 @@ export const fileSchema = new Schema({
   channelDamage:{type:Number,required:true},
   bubbleNumber:{type:Number,required:true},
   note:{type:String},
+  spectrum:{type:String},
 });
 
 const FileModel: Model<IFile> = model("file", fileSchema);

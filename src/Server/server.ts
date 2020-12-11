@@ -4,6 +4,7 @@ import { FileAttr, FileModel, IFile, updateMany } from "../Database";
 import { saveFilesInfo } from "../ParseFiles";
 import cors from "cors";
 import _ from "lodash";
+import {Promise as PromiseBL} from "bluebird";
 const path = require('path');
 function startServer() {
   const app = express();
@@ -117,6 +118,22 @@ function startServer() {
     } catch (err) {
       console.log(err);
       res.send({ result: 'error' });
+    }
+  });
+
+  //temporal method, copy field note to spectrum
+  app.post('/api/copy-note',async (req: express.Request, res: express.Response) =>{
+    try{
+      const fileDocs = await FileModel.find({}).exec();
+      await PromiseBL.each(fileDocs,async (fileDoc:IFile)=>{
+        const note:string = fileDoc.note;
+        fileDoc.spectrum = note;
+        await fileDoc.save();
+      });
+      res.send('success')
+    }catch(err){
+      res.send('failed')
+      console.log(err)
     }
   })
 

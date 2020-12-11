@@ -63,6 +63,7 @@ function pathToAttr(path: string): FileAttr {
     bubbleHandling: 1,
     channelDamage: 0,
     note: "",
+    spectrum:"",
   };
 }
 
